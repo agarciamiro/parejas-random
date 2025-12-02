@@ -1,23 +1,26 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
 from logic import generar_parejas
 
 app = FastAPI()
 
-# RUTAS DE ARCHIVOS STATIC Y TEMPLATES
+# Rutas de templates y archivos estáticos
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# SERVIR LA PÁGINA PRINCIPAL
+
+# Página principal
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request):
+async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# ENDPOINT API PARA GENERAR LAS PAREJAS
+
+# API para generar parejas
 @app.post("/generar")
-def generar(data: dict):
+async def generar(data: dict):
     nombres = data.get("nombres", [])
     return generar_parejas(nombres)
 
