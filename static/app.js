@@ -1,6 +1,6 @@
 let nombres = [];
 
-// Agregar nombre a la lista
+// Agregar nombre
 function agregarNombre() {
     const input = document.getElementById("nombre");
     let valor = input.value.trim();
@@ -9,66 +9,64 @@ function agregarNombre() {
         alert("Nombre mínimo 4 letras");
         return;
     }
-
-    const upper = valor.toUpperCase();
-
-    if (nombres.includes(upper)) {
+    if (nombres.includes(valor.toUpperCase())) {
         alert("Nombre ya ingresado");
         return;
     }
 
-    nombres.push(upper);
+    nombres.push(valor.toUpperCase());
     input.value = "";
     actualizarLista();
 }
 
-// Refresca la lista visual de nombres
+// Actualizar lista de nombres
 function actualizarLista() {
-    const lista = document.getElementById("lista");
-    lista.innerHTML = nombres.map((n) => `<li>${n}</li>`).join("");
+    document.getElementById("lista").innerHTML =
+        nombres.map(n => `<li>${n}</li>`).join("");
 }
 
-// Llama al backend FastAPI para generar las parejas/grupos
+// Generar parejas llamando al backend
 async function generarParejas() {
     if (![2, 4, 6, 8].includes(nombres.length)) {
-        alert("Debes ingresar 2, 4, 6 u 8 nombres");
+        alert("Debes ingresar 2,4,6 u 8 nombres");
         return;
     }
 
-    try {
-        const response = await fetch("/generar", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombres: nombres }),
-        });
+    const response = await fetch("https://parejas-random.onrender.com/generar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombres })
+    });
 
-        if (!response.ok) {
-            const txt = await response.text();
-            console.error("Error API:", txt);
-            alert("Error en el servidor");
-            return;
-        }
-
-        const data = await response.json();
-        mostrarResultado(data);
-    } catch (err) {
-        console.error(err);
-        alert("No se pudo conectar con el servidor");
+    if (!response.ok) {
+        alert("Error en la API");
+        return;
     }
+
+    const data = await response.json();
+    mostrarResultado(data);
 }
 
-// Muestra el resultado en pantalla
+// Mostrar resultados
 function mostrarResultado(data) {
-    const cont = document.getElementById("resultado");
-
-    if (data.error) {
-        cont.innerHTML = `<p style="color:red">${data.error}</p>`;
-        return;
-    }
-
     let html = "";
 
     if (data.asignaciones) {
-        data.asignaciones.forEach((x) => {
+        data.asignaciones.forEach(x => {
             if (x.persona) {
-                html
+                html += `<p>${x.persona} ➤ ${x.etiqueta}</p>`;
+            } else {
+                html += `<p>${x.pareja[0]} & ${x.pareja[1]} ➤ ${x.etiqueta}</p>`;
+            }
+        });
+    }
+
+    if (data.grupos) {
+        data.grupos.forEach(g => {
+            html += `<p>${g.grupo.join(", ")} ➤ ${g.etiqueta}</p>`;
+        });
+    }
+
+    document.getElementById("resultado").innerHTML = html;
+}
+
