@@ -2,20 +2,21 @@ let nombres = [];
 
 function agregarNombre() {
     const input = document.getElementById("nombre");
+    const valor = input.value.trim();
 
-    if (input.value.trim() === "" || input.value.length < 4) {
+    if (valor === "" || valor.length < 4) {
         alert("Nombre mínimo 4 letras");
         return;
     }
 
-    const nombre = input.value.toUpperCase();
+    const normalizado = valor.toUpperCase();
 
-    if (nombres.includes(nombre)) {
+    if (nombres.includes(normalizado)) {
         alert("Nombre ya ingresado");
         return;
     }
 
-    nombres.push(nombre);
+    nombres.push(normalizado);
     input.value = "";
     actualizarLista();
 }
@@ -26,8 +27,8 @@ function actualizarLista() {
 }
 
 async function generarParejas() {
-    if (![2, 4, 6, 8].includes(nombres.length)) {
-        alert("Debes ingresar 2,4,6 o 8 nombres");
+    if (![2,4,6,8].includes(nombres.length)) {
+        alert("Debes ingresar 2, 4, 6 o 8 nombres");
         return;
     }
 
@@ -46,10 +47,11 @@ function mostrarResultado(data) {
 
     if (data.asignaciones) {
         data.asignaciones.forEach(x => {
-            if (x.persona)
+            if (x.persona) {
                 html += ⁠ <p>${x.persona} ➤ ${x.etiqueta}</p> ⁠;
-            else
+            } else {
                 html += ⁠ <p>${x.pareja[0]} & ${x.pareja[1]} ➤ ${x.etiqueta}</p> ⁠;
+            }
         });
     }
 
@@ -60,5 +62,4 @@ function mostrarResultado(data) {
     }
 
     document.getElementById("resultado").innerHTML = html;
-}tById("resultado").innerHTML = html;
 }
