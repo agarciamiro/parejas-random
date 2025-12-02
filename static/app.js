@@ -28,7 +28,7 @@ function actualizarLista() {
 // Llamada al backend FastAPI
 async function generarParejas() {
     if (![2, 4, 6, 8].includes(nombres.length)) {
-        alert("Debes ingresar 2,4,6 u 8 nombres");
+        alert("Debes ingresar 2, 4, 6 u 8 nombres");
         return;
     }
 
@@ -67,5 +67,5 @@ function mostrarResultado(data) {
         });
     }
 
-    document.getElementById("resultado").innerHTML =
-
+    document.getElementById("resultado").innerHTML = html;
+}
