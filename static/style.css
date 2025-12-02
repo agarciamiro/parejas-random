@@ -32,31 +32,13 @@ button {
 
 button:hover { opacity: .8; }
 
+/* 🔥 ESTA ES LA LÍNEA QUE SOLUCIONA TU PROBLEMA */
+#lista {
+    list-style-type: none;
+    padding-left: 0;
+}
+
 #resultado {
     margin-top: 15px;
     font-size: 18px;
     font-weight: bold;
-}
-/* ==== Numeración automática en la lista ==== */
-
-#lista {
-    list-style: none; /* eliminamos bullets */
-    padding-left: 0;
-    counter-reset: item; /* reinicia contador */
-    text-align: left; /* queda más ordenado */
-    margin-top: 10px;
-}
-
-#lista li {
-    counter-increment: item; /* suma 1 por cada li */
-    margin: 4px 0;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#lista li::before {
-    content: counter(item) ". "; /* muestra número automático */
-    font-weight: bold;
-    color: #333;
-}
-
