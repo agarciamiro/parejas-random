@@ -1,93 +1,110 @@
-# parejas-random
-Generador de Parejas Aleatorias (Web + API + iOS)
+📱 Parejas Random
 
-📱 Parejas Random — API & Web App
+Generador inteligente de parejas y grupos aleatorios para 2, 4, 6 y 8 personas, con asignaciones PAR / IMPAR según reglas especiales de tu proyecto.
 
-Generador inteligente de parejas y grupos aleatorios para 2, 4, 6 y 8 personas, con reglas especiales de asignación PAR / IMPAR.
-
-Incluye:
-	•	🟦 Frontend web (HTML + CSS + JS)
-	•	🟧 Backend FastAPI
-	•	🍏 App iOS (SwiftUI) que consume la API
-	•	☁️ Preparado para deploy en Render
+Este repositorio contiene:
+	•	🌐 Backend FastAPI
+	•	💻 Frontend web (HTML + CSS + JS)
+	•	📱 Código base para App iOS (SwiftUI)
+	•	☁️ Deploy listo para Render.com
 
 ⸻
 
-🚀 Tecnologías usadas
+🚀 Características principales
 
-Backend
-	•	Python 3
-	•	FastAPI
-	•	Uvicorn
-	•	Pydantic
-
-Frontend
-	•	HTML5
-	•	CSS3
-	•	JavaScript
-
-iPhone App
-	•	SwiftUI
-	•	WKWebView / API Service
-
-Hosting
-	•	Render.com
+✔ Generación de parejas con reglas especiales
+✔ Animación tipo “ruleta” antes del resultado
+✔ Exportación de resultados a TXT
+✔ Historial persistente
+✔ API lista para consumo desde Swift
+✔ Página web incluida en /templates y /static
 
 ⸻
 
-🔧 API — Endpoints
+🧠 Lógica de emparejamiento
+	•	2 personas → cada una recibe PAR o IMPAR
+	•	4 personas → 2 parejas, mitad PAR, mitad IMPAR
+	•	6 personas → 2 grupos de 3, uno PAR / uno IMPAR
+	•	8 personas → 4 parejas, mitad PAR, mitad IMPAR
 
-POST /generar
+Toda la lógica está implementada en:
+logic.py
 
-Request
-{
-  "nombres": ["Juan", "Pedro", "Jose", "Rafael"]
-}
-
-Response
-
-{
-  "tipo": "parejas",
-  "asignaciones": [
-    { "pareja": ["JUAN", "PEDRO"], "etiqueta": "PAR" },
-    { "pareja": ["JOSE", "RAFAEL"], "etiqueta": "IMPAR" }
-  ]
-}
+parejas-random/
+├─ main.py              # FastAPI backend
+├─ logic.py             # Reglas de emparejamiento
+├─ requirements.txt     # Dependencias
+├─ render.yaml          # Config para Render deploy
+├─ templates/
+│   └─ index.html       # Web frontend
+├─ static/
+│   ├─ style.css
+│   ├─ main.js
+│   ├─ app.js
+│   ├─ sw.js
+│   └─ manifest.json
+├─ ParejasRandomApp/    # SwiftUI app (opcional)
+└─ history.json         # Historial
 
 📦 Instalación local
 
+Requisitos:
+	•	Python 3.10+
+	•	pip instalado
+
+1.⁠ ⁠Instalar dependencias
+
 pip install -r requirements.txt
+
+2.⁠ ⁠Ejecutar servidor local
+
 uvicorn main:app --reload
 
-Abrir en navegador:
+Backend disponible en:
 
-http://127.0.0.1:8000/
+http://127.0.0.1:8000
 
-🌐 Despliegue en Render
+Frontend web:
 
-Tu proyecto ya incluye:
+http://127.0.0.1:8000
 
-render.yaml
-requirements.txt
-main.py
+🌐 Deploy en Render
 
-Solo crea un Web Service → Python / FastAPI
-y Render hará el resto.
+El repositorio ya incluye:
+	•	render.yaml → indica a Render cómo correr FastAPI
+	•	requirements.txt → todas las dependencias
+	•	main.py → punto de entrada de la app
 
-⸻
-
-📱 App iOS
-
-El proyecto iOS está en:
-
-ParejasRandomApp/
-
-La app carga:
-	•	el sitio web (versión web) o
-	•	los datos desde la API FastAPI
+Pasos rápidos:
+	1.	Subir este repo a GitHub
+	2.	Crear servicio “Web Service” en Render
+	3.	Conectar el repo
+	4.	Elegir Build Command (Render lo lee del yaml)
+	5.	Deploy automático
 
 ⸻
+
+📱 Uso en App iOS (Swift)
+
+Usa el archivo:
+
+ParejasRandomApp/ApiService.swift
+
+Ejemplo de consumo de API:
+
+let url = URL(string: "https://TU-RENDER-URL.com/generar")!
+
+La app simplemente envía:
+
+{
+  "nombres": ["Juan", "Pedro", "José", "Rafael"]
+}
+
+🤝 Autor
+
+Creado por Alfonso Garcia Miro Peschiera
+Proyecto personal — todos los derechos reservados.
 
 📄 Licencia
 
-Proyecto personal de Alfonso Garcia Miro Peschiera.
+Uso personal y educativo. No redistribuir sin permiso.
