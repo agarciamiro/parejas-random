@@ -1,137 +1,147 @@
 🎱 Parejas Random
 
-Generador inteligente de parejas y grupos aleatorios para 2, 4, 6 u 8 personas.
-Incluye backend FastAPI, interfaz web, app iOS, animaciones y sistema de historial.
+<p align="center">
+  <img src="AppIcons/appstore.png" width="180">
+</p>
 
-⸻
+<h1 align="center">📱 PAREJAS RANDOM</h1>
+<h3 align="center">App + API para generar parejas y grupos aleatorios</h3>
 
-🚀 Características principales
+---
 
-✔ Genera parejas o grupos según el número de personas:
-	•	2 personas → PAR / IMPAR por persona
-	•	4 personas → 2 parejas → mitad PAR, mitad IMPAR
-	•	6 personas → 2 grupos de 3 → uno PAR y otro IMPAR
-	•	8 personas → 4 parejas → mitad PAR, mitad IMPAR
+## 🧠 ¿Qué es Parejas Random?
 
-✔ Animación estilo “ruleta” antes de mostrar el resultado
-✔ Historial de resultados
-✔ Exportación a TXT
-✔ API lista para iOS / Web / Render.com
-✔ UI Web integrada
-✔ Normalización automática de nombres (mayúsculas, sin acentos)
+Una app inteligente para formar *parejas* o *grupos* aleatorios para:
 
-⸻
+•⁠  ⁠2 personas → cada uno recibe *PAR* o *IMPAR*
+•⁠  ⁠4 personas → 2 parejas, mitad PAR y mitad IMPAR
+•⁠  ⁠6 personas → 2 grupos de 3, uno PAR y uno IMPAR
+•⁠  ⁠8 personas → 4 parejas, mitad PAR y mitad IMPAR
 
-🧩 Tecnologías usadas
+Funciona en:
 
-Backend
-	•	Python 3
-	•	FastAPI
-	•	Uvicorn
-	•	Pydantic
+•⁠  ⁠🌐 *Web*
+•⁠  ⁠⚡ *API en Render (FastAPI)*
+•⁠  ⁠📱 *App iPhone (SwiftUI)*
 
-Web App
-	•	HTML5
-	•	CSS3
-	•	JavaScript (fetch API)
+---
 
-Mobile App
-	•	SwiftUI
-	•	WKWebView con backend remoto
+## 🚀 Tecnologías
 
-Hosting
-	•	Render.com
+### Backend (API)
+•⁠  ⁠Python 3
+•⁠  ⁠FastAPI
+•⁠  ⁠Uvicorn
+•⁠  ⁠Pydantic
 
-⸻
+### Frontend
+•⁠  ⁠HTML + CSS + JS
+•⁠  ⁠Service Worker (soporte PWA)
 
-📦 Instalación local
+### iOS App
+•⁠  ⁠SwiftUI
+•⁠  ⁠WKWebView (versión web embebida)
+•⁠  ⁠Iconos personalizados
 
-Clona el repositorio:
+### Hosting
+•⁠  ⁠Render.com  
+•⁠  ⁠GitHub (repositorio)
 
-git clone https://github.com/agarciamiro/parejas-random
-cd parejas-random
+---
 
-Instala dependencias:
+## 📦 Instalación local
 
+```bash
 pip install -r requirements.txt
-
-Ejecuta localmente:
-
 uvicorn main:app --reload
 
-Abre en tu navegador:
+API disponible en:
 
 http://127.0.0.1:8000
 
-🌐 Despliegue en Render.com
-	1.	Crea un servicio Web Service
-	2.	Selecciona tu repo parejas-random
-	3.	Coloca:
+🔧 API — Endpoints
 
-Environment: Python
-Build:
+POST /generar
 
-pip install -r requirements.txt
+Request:
 
-Start command:
-
-uvicorn main:app --host=0.0.0.0 --port=10000
-
-(Render usa el puerto $PORT, FastAPI lo ajusta automáticamente)
-	4.	¡Listo! Render generará una URL:
-
-https://parejas-random.onrender.com
-
-Esa será la URL a insertar en tu app iOS.
-
-⸻
-
-📱 Integración con iOS (SwiftUI)
-
-Tu archivo ContentView.swift debe contener:
-
-import SwiftUI
-import WebKit
-
-struct ContentView: View {
-    var body: some View {
-        WebView(url: URL(string: "https://TU-URL-RENDER")!)
-            .ignoresSafeArea()
-    }
+{
+  "nombres": ["Juan", "Pedro", "Jose", "Rafael"]
 }
 
-struct WebView: UIViewRepresentable {
-    let url: URL
+Response:
 
-    func makeUIView(context: Context) -> WKWebView {
-        let webview = WKWebView()
-        webview.load(URLRequest(url: url))
-        return webview
-    }
-
-    func updateUIView(_ uiView: WKWebView, context: Context) {}
+{
+  "tipo": "parejas",
+  "asignaciones": [
+    {"pareja": ["JUAN", "PEDRO"], "etiqueta": "PAR"},
+    {"pareja": ["JOSE", "RAFAEL"], "etiqueta": "IMPAR"}
+  ]
 }
 
-📄 Estructura del proyecto
+🌐 Web App
+
+Archivos principales:
+
+static/
+templates/index.html
+main.py
+logic.py
+
+Para ejecutarla:
+
+python main.py
+
+📱 iPhone App
+
+Ubicada en:
+
+/ParejasRandomApp/
+
+Archivos relevantes:
+	•	ContentView.swift
+	•	ApiService.swift
+	•	Models.swift
+	•	ResultView.swift
+	•	NameInputView.swift
+
+La app carga la web oficial mediante:
+
+WebView(url: URL(string: "https://tu-render-url")!)
+
+📄 Estructura del Proyecto
 
 parejas-random/
-├─ main.py
-├─ logic.py
-├─ requirements.txt
+│ main.py
+│ logic.py
+│ requirements.txt
+│ render.yaml
+│ README.md
+│
 ├─ static/
-│  ├─ style.css
-│  ├─ main.js
-│  ├─ manifest.json
-│  ├─ sw.js
-│  └─ index.html
+│   ├─ style.css
+│   ├─ app.js
+│   ├─ manifest.json
+│   ├─ sw.js
+│   └─ index.html
+│
 ├─ templates/
-│  └─ index.html
+│   └─ index.html
+│
 ├─ AppIcons/
-│  └─ (todos los tamaños del icono)
-├─ history.json
-└─ README.md
+│   ├─ appstore.png
+│   └─ Assets.xcassets/
+│       └─ AppIcon.appiconset/
+│
+└─ ParejasRandomApp/
+    ├─ ContentView.swift
+    ├─ ApiService.swift
+    ├─ Models.swift
+    ├─ ResultView.swift
+    └─ NameInputView.swift
 
-📚 Licencia
+👤 Autor
 
-Proyecto personal de Alfonso García Miro Peschiera.
-Uso libre y no comercial permitido.
+Alfonso Garcia Miro Peschiera
+
+Proyecto personal — Todos los derechos reservados.
