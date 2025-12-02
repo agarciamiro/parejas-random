@@ -6,16 +6,16 @@ from logic import generar_parejas
 
 app = FastAPI()
 
-# Rutas de templates y archivos estáticos
+# RUTAS DE ARCHIVOS STATIC Y TEMPLATES
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Página principal
+# SERVIR LA PÁGINA PRINCIPAL
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# API para generar parejas
+# ENDPOINT API PARA GENERAR LAS PAREJAS
 @app.post("/generar")
 def generar(data: dict):
     nombres = data.get("nombres", [])
