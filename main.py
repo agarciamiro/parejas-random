@@ -1,8 +1,13 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from logic import generar_parejas
 
 app = FastAPI(title="Parejas Random API")
+
+# Servir carpeta /static
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class Personas(BaseModel):
     nombres: list[str]
@@ -11,8 +16,7 @@ class Personas(BaseModel):
 def generar(personas: Personas):
     return generar_parejas(personas.nombres)
 
-
-# ----------- NECESARIO PARA RENDER Y PRUEBAS LOCALES ----------
-if __name__ == "_main_":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=10000)
+# Ruta raíz "/" → mostrar frontend
+@app.get("/")
+def read_root():
+    return FileResponse("static/index.html")
