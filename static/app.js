@@ -2,21 +2,21 @@ let nombres = [];
 
 function agregarNombre() {
     const input = document.getElementById("nombre");
-    const texto = input.value.trim();
+    let nombre = input.value.trim();
 
-    if (texto === "" || texto.length < 4) {
-        alert("Nombre mínimo 4 letras");
+    if (nombre === "" || nombre.length < 4) {
+        alert("El nombre debe tener mínimo 4 letras");
         return;
     }
 
-    const nombreNorm = texto.toUpperCase();
+    nombre = nombre.toUpperCase();
 
-    if (nombres.includes(nombreNorm)) {
-        alert("Nombre ya ingresado");
+    if (nombres.includes(nombre)) {
+        alert("Ese nombre ya fue ingresado");
         return;
     }
 
-    nombres.push(nombreNorm);
+    nombres.push(nombre);
     input.value = "";
     actualizarLista();
 }
@@ -27,14 +27,14 @@ function actualizarLista() {
 }
 
 async function generarParejas() {
-    if (![2,4,6,8].includes(nombres.length)) {
-        alert("Debes ingresar 2, 4, 6 u 8 nombres");
+    if (![2, 4, 6, 8].includes(nombres.length)) {
+        alert("Debes ingresar exactamente 2, 4, 6 u 8 nombres");
         return;
     }
 
     const response = await fetch("https://parejas-random.onrender.com/generar", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombres })
     });
 
@@ -59,6 +59,10 @@ function mostrarResultado(data) {
         data.grupos.forEach(g => {
             html += `<p>${g.grupo.join(", ")} ➤ ${g.etiqueta}</p>`;
         });
+    }
+
+    if (data.error) {
+        html = `<p style="color:red;">${data.error}</p>`;
     }
 
     document.getElementById("resultado").innerHTML = html;
