@@ -1,0 +1,30 @@
+{
+    "name": "Parejas Random",
+    "short_name": "Parejas",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ffffff",
+    "theme_color": "#0077ff",
+    "icons": [
+        {
+            "src": "icon_192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon_512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+
+📄 /static/sw.js  (service worker)
+
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", () => clients.claim());
+
+self.addEventListener("fetch", (event) => {
+    event.respondWith(fetch(event.request));
+});
