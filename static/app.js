@@ -2,15 +2,20 @@ let nombres = [];
 
 function agregarNombre() {
     const input = document.getElementById("nombre");
+
     if (input.value.trim() === "" || input.value.length < 4) {
         alert("Nombre mínimo 4 letras");
         return;
     }
-    if (nombres.includes(input.value.toUpperCase())) {
+
+    const nombre = input.value.toUpperCase();
+
+    if (nombres.includes(nombre)) {
         alert("Nombre ya ingresado");
         return;
     }
-    nombres.push(input.value.toUpperCase());
+
+    nombres.push(nombre);
     input.value = "";
     actualizarLista();
 }
@@ -21,16 +26,12 @@ function actualizarLista() {
 }
 
 async function generarParejas() {
-    if ([2,4,6,8].includes(nombres.length) === false) {
+    if (![2, 4, 6, 8].includes(nombres.length)) {
         alert("Debes ingresar 2,4,6 o 8 nombres");
         return;
     }
 
     const response = await fetch("https://parejas-random.onrender.com/generar", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({nombres: nombres})
-    });
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombres })
@@ -45,8 +46,10 @@ function mostrarResultado(data) {
 
     if (data.asignaciones) {
         data.asignaciones.forEach(x => {
-            if (x.persona) html += ⁠ <p>${x.persona} ➤ ${x.etiqueta}</p> ⁠;
-            else html += ⁠ <p>${x.pareja[0]} & ${x.pareja[1]} ➤ ${x.etiqueta}</p> ⁠;
+            if (x.persona)
+                html += ⁠ <p>${x.persona} ➤ ${x.etiqueta}</p> ⁠;
+            else
+                html += ⁠ <p>${x.pareja[0]} & ${x.pareja[1]} ➤ ${x.etiqueta}</p> ⁠;
         });
     }
 
@@ -57,4 +60,5 @@ function mostrarResultado(data) {
     }
 
     document.getElementById("resultado").innerHTML = html;
+}tById("resultado").innerHTML = html;
 }
