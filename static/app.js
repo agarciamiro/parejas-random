@@ -26,7 +26,15 @@ async function generarParejas() {
         return;
     }
 
-    const response = await fetch("/generar", {
+    const response = await fetch("https://parejas-random.onrender.com/generar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nombres: nombres
+      })
+    });
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombres })
