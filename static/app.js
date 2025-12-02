@@ -1,34 +1,34 @@
 let nombres = [];
 
+// Agregar nombre
 function agregarNombre() {
     const input = document.getElementById("nombre");
-    let nombre = input.value.trim();
+    let valor = input.value.trim();
 
-    if (nombre === "" || nombre.length < 4) {
-        alert("El nombre debe tener mínimo 4 letras");
+    if (valor.length < 4) {
+        alert("Nombre mínimo 4 letras");
+        return;
+    }
+    if (nombres.includes(valor.toUpperCase())) {
+        alert("Nombre ya ingresado");
         return;
     }
 
-    nombre = nombre.toUpperCase();
-
-    if (nombres.includes(nombre)) {
-        alert("Ese nombre ya fue ingresado");
-        return;
-    }
-
-    nombres.push(nombre);
+    nombres.push(valor.toUpperCase());
     input.value = "";
     actualizarLista();
 }
 
+// Actualizar lista de nombres
 function actualizarLista() {
     document.getElementById("lista").innerHTML =
         nombres.map(n => `<li>${n}</li>`).join("");
 }
 
+// Generar parejas llamando al backend FastAPI
 async function generarParejas() {
     if (![2, 4, 6, 8].includes(nombres.length)) {
-        alert("Debes ingresar exactamente 2, 4, 6 u 8 nombres");
+        alert("Debes ingresar 2,4,6 u 8 nombres");
         return;
     }
 
@@ -38,10 +38,16 @@ async function generarParejas() {
         body: JSON.stringify({ nombres })
     });
 
+    if (!response.ok) {
+        alert("Error en la API");
+        return;
+    }
+
     const data = await response.json();
     mostrarResultado(data);
 }
 
+// Mostrar resultados
 function mostrarResultado(data) {
     let html = "";
 
@@ -61,10 +67,7 @@ function mostrarResultado(data) {
         });
     }
 
-    if (data.error) {
-        html = `<p style="color:red;">${data.error}</p>`;
-    }
-
     document.getElementById("resultado").innerHTML = html;
 }
+
 
