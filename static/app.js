@@ -19,13 +19,13 @@ function agregarNombre() {
     actualizarLista();
 }
 
-// Actualizar lista de nombres
+// Actualizar lista numerada
 function actualizarLista() {
     document.getElementById("lista").innerHTML =
-        nombres.map(n => `<li>${n}</li>`).join("");
+        nombres.map((n, i) => `<li>${i + 1}. ${n}</li>`).join("");
 }
 
-// Generar parejas llamando al backend
+// Llamada al backend FastAPI
 async function generarParejas() {
     if (![2, 4, 6, 8].includes(nombres.length)) {
         alert("Debes ingresar 2,4,6 u 8 nombres");
@@ -67,6 +67,5 @@ function mostrarResultado(data) {
         });
     }
 
-    document.getElementById("resultado").innerHTML = html;
-}
+    document.getElementById("resultado").innerHTML =
 
