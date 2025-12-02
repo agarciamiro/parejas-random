@@ -1,110 +1,137 @@
-📱 Parejas Random
+🎱 Parejas Random
 
-Generador inteligente de parejas y grupos aleatorios para 2, 4, 6 y 8 personas, con asignaciones PAR / IMPAR según reglas especiales de tu proyecto.
-
-Este repositorio contiene:
-	•	🌐 Backend FastAPI
-	•	💻 Frontend web (HTML + CSS + JS)
-	•	📱 Código base para App iOS (SwiftUI)
-	•	☁️ Deploy listo para Render.com
+Generador inteligente de parejas y grupos aleatorios para 2, 4, 6 u 8 personas.
+Incluye backend FastAPI, interfaz web, app iOS, animaciones y sistema de historial.
 
 ⸻
 
 🚀 Características principales
 
-✔ Generación de parejas con reglas especiales
-✔ Animación tipo “ruleta” antes del resultado
-✔ Exportación de resultados a TXT
-✔ Historial persistente
-✔ API lista para consumo desde Swift
-✔ Página web incluida en /templates y /static
+✔ Genera parejas o grupos según el número de personas:
+	•	2 personas → PAR / IMPAR por persona
+	•	4 personas → 2 parejas → mitad PAR, mitad IMPAR
+	•	6 personas → 2 grupos de 3 → uno PAR y otro IMPAR
+	•	8 personas → 4 parejas → mitad PAR, mitad IMPAR
+
+✔ Animación estilo “ruleta” antes de mostrar el resultado
+✔ Historial de resultados
+✔ Exportación a TXT
+✔ API lista para iOS / Web / Render.com
+✔ UI Web integrada
+✔ Normalización automática de nombres (mayúsculas, sin acentos)
 
 ⸻
 
-🧠 Lógica de emparejamiento
-	•	2 personas → cada una recibe PAR o IMPAR
-	•	4 personas → 2 parejas, mitad PAR, mitad IMPAR
-	•	6 personas → 2 grupos de 3, uno PAR / uno IMPAR
-	•	8 personas → 4 parejas, mitad PAR, mitad IMPAR
+🧩 Tecnologías usadas
 
-Toda la lógica está implementada en:
-logic.py
+Backend
+	•	Python 3
+	•	FastAPI
+	•	Uvicorn
+	•	Pydantic
 
-parejas-random/
-├─ main.py              # FastAPI backend
-├─ logic.py             # Reglas de emparejamiento
-├─ requirements.txt     # Dependencias
-├─ render.yaml          # Config para Render deploy
-├─ templates/
-│   └─ index.html       # Web frontend
-├─ static/
-│   ├─ style.css
-│   ├─ main.js
-│   ├─ app.js
-│   ├─ sw.js
-│   └─ manifest.json
-├─ ParejasRandomApp/    # SwiftUI app (opcional)
-└─ history.json         # Historial
+Web App
+	•	HTML5
+	•	CSS3
+	•	JavaScript (fetch API)
+
+Mobile App
+	•	SwiftUI
+	•	WKWebView con backend remoto
+
+Hosting
+	•	Render.com
+
+⸻
 
 📦 Instalación local
 
-Requisitos:
-	•	Python 3.10+
-	•	pip instalado
+Clona el repositorio:
 
-1.⁠ ⁠Instalar dependencias
+git clone https://github.com/agarciamiro/parejas-random
+cd parejas-random
+
+Instala dependencias:
 
 pip install -r requirements.txt
 
-2.⁠ ⁠Ejecutar servidor local
+Ejecuta localmente:
 
 uvicorn main:app --reload
 
-Backend disponible en:
+Abre en tu navegador:
 
 http://127.0.0.1:8000
 
-Frontend web:
+🌐 Despliegue en Render.com
+	1.	Crea un servicio Web Service
+	2.	Selecciona tu repo parejas-random
+	3.	Coloca:
 
-http://127.0.0.1:8000
+Environment: Python
+Build:
 
-🌐 Deploy en Render
+pip install -r requirements.txt
 
-El repositorio ya incluye:
-	•	render.yaml → indica a Render cómo correr FastAPI
-	•	requirements.txt → todas las dependencias
-	•	main.py → punto de entrada de la app
+Start command:
 
-Pasos rápidos:
-	1.	Subir este repo a GitHub
-	2.	Crear servicio “Web Service” en Render
-	3.	Conectar el repo
-	4.	Elegir Build Command (Render lo lee del yaml)
-	5.	Deploy automático
+uvicorn main:app --host=0.0.0.0 --port=10000
+
+(Render usa el puerto $PORT, FastAPI lo ajusta automáticamente)
+	4.	¡Listo! Render generará una URL:
+
+https://parejas-random.onrender.com
+
+Esa será la URL a insertar en tu app iOS.
 
 ⸻
 
-📱 Uso en App iOS (Swift)
+📱 Integración con iOS (SwiftUI)
 
-Usa el archivo:
+Tu archivo ContentView.swift debe contener:
 
-ParejasRandomApp/ApiService.swift
+import SwiftUI
+import WebKit
 
-Ejemplo de consumo de API:
-
-let url = URL(string: "https://TU-RENDER-URL.com/generar")!
-
-La app simplemente envía:
-
-{
-  "nombres": ["Juan", "Pedro", "José", "Rafael"]
+struct ContentView: View {
+    var body: some View {
+        WebView(url: URL(string: "https://TU-URL-RENDER")!)
+            .ignoresSafeArea()
+    }
 }
 
-🤝 Autor
+struct WebView: UIViewRepresentable {
+    let url: URL
 
-Creado por Alfonso Garcia Miro Peschiera
-Proyecto personal — todos los derechos reservados.
+    func makeUIView(context: Context) -> WKWebView {
+        let webview = WKWebView()
+        webview.load(URLRequest(url: url))
+        return webview
+    }
 
-📄 Licencia
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
 
-Uso personal y educativo. No redistribuir sin permiso.
+📄 Estructura del proyecto
+
+parejas-random/
+├─ main.py
+├─ logic.py
+├─ requirements.txt
+├─ static/
+│  ├─ style.css
+│  ├─ main.js
+│  ├─ manifest.json
+│  ├─ sw.js
+│  └─ index.html
+├─ templates/
+│  └─ index.html
+├─ AppIcons/
+│  └─ (todos los tamaños del icono)
+├─ history.json
+└─ README.md
+
+📚 Licencia
+
+Proyecto personal de Alfonso García Miro Peschiera.
+Uso libre y no comercial permitido.
