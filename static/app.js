@@ -70,4 +70,3 @@ function mostrarResultado(data) {
     document.getElementById("resultado").innerHTML = html;
 }
 
-
