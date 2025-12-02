@@ -1,27 +1,23 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from logic import generar_parejas
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from logic import generar_parejas
 
 app = FastAPI()
 
-# Servir carpeta static (CSS, JS, imágenes)
+# Servir la carpeta static/
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Servir templates
-templates = Jinja2Templates(directory="templates")
+# Ruta para servir index.html como página principal
+@app.get("/")
+def root():
+    return FileResponse("static/index.html")
 
-# Modelo de entrada
+
 class Personas(BaseModel):
     nombres: list[str]
 
-# Ruta principal → muestra index.html
-@app.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-# Endpoint API
 @app.post("/generar")
-async def generar(personas: Personas):
+def generar(personas: Personas):
     return generar_parejas(personas.nombres)
