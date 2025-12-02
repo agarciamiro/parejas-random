@@ -1,25 +1,27 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from logic import generar_parejas
+import os
 
 app = FastAPI()
 
-# Rutas de templates y estáticos
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Montar carpeta static para CSS/JS
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
-# Página principal
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+# Página principal: devuelve templates/index.html
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+def home():
+    index_path = os.path.join(TEMPLATES_DIR, "index.html")
+    with open(index_path, "r", encoding="utf-8") as f:
+        html = f.read()
+    return HTMLResponse(content=html)
 
-# API
-@app.post("/generar")
-def generar(data: dict):
-    nombres = data.get("nombres", [])
-    return generar_parejas(nombres)
 
 
 
