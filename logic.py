@@ -1,7 +1,6 @@
 import random
 import unicodedata
 
-
 def normalizar(texto: str) -> str:
     texto = texto.strip().upper()
     texto = ''.join(
