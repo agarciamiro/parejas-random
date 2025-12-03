@@ -21,14 +21,16 @@ function agregarNombre() {
 
 // Actualizar lista numerada
 function actualizarLista() {
-    document.getElementById("lista").innerHTML =
-        nombres.map((n, i) => `<li>${i + 1}. ${n}</li>`).join("");
+    const lista = document.getElementById("lista");
+    lista.innerHTML = nombres
+        .map((n, i) => `<li>${i + 1}. ${n}</li>`)
+        .join("");
 }
 
 // Llamada al backend FastAPI
 async function generarParejas() {
     if (![2, 4, 6, 8].includes(nombres.length)) {
-        alert("Debes ingresar 2, 4, 6 u 8 nombres");
+        alert("Debes ingresar 2,4,6 u 8 nombres");
         return;
     }
 
@@ -69,9 +71,11 @@ function mostrarResultado(data) {
 
     document.getElementById("resultado").innerHTML = html;
 }
+
+// 🔄 Reset total de la app
 function resetApp() {
-    nombres = []; // Vacía la lista de nombres
-    document.getElementById("lista").innerHTML = ""; 
+    nombres = [];
+    document.getElementById("lista").innerHTML = "";
     document.getElementById("resultado").innerHTML = "";
     document.getElementById("nombre").value = "";
-    
+}
