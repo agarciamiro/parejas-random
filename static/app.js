@@ -69,3 +69,9 @@ function mostrarResultado(data) {
 
     document.getElementById("resultado").innerHTML = html;
 }
+function resetApp() {
+    nombres = []; // Vacía la lista de nombres
+    document.getElementById("lista").innerHTML = ""; 
+    document.getElementById("resultado").innerHTML = "";
+    document.getElementById("nombre").value = "";
+    
