@@ -46,6 +46,12 @@ async function generarParejas() {
     }
 
     const data = await response.json();
+
+    // Enviar parejas a la app iOS
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.parejas) {
+        window.webkit.messageHandlers.parejas.postMessage(data);
+    }    
+    
     mostrarResultado(data);
 }
 
