@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Parejas Random</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parejas Aleatorias</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
 
-        <h1>🎲 Parejas Random</h1>
-        <p>Ingresa entre <b>2 a 8 nombres</b> (solo números pares)</p>
+    <h1>🎲 Parejas Random</h1>
+    <p>Ingresa entre <b>2, 4, 6 u 8 nombres</b></p>
 
-        <div id="input-area">
-            <input type="text" id="nombre" placeholder="Ingresa un nombre">
-            <button type="button" onclick="agregarNombre()">➕ Agregar</button>
-        </div>
-
-        <h3>Nombres ingresados:</h3>
-        <ul id="lista"></ul>
-
-        <div style="margin-top: 12px;">
-            <button type="button" onclick="generarParejas()">Generar Parejas 🔥</button>
-            <button type="button" onclick="resetApp()">Reset 🔄</button>
-        </div>
-
-        <h2 style="margin-top: 20px;">Resultado:</h2>
-        <div id="resultado"></div>
-
+    <!-- INGRESO DE NOMBRES -->
+    <div id="input-area">
+        <input type="text" id="nombre" placeholder="Ingresa un nombre">
+        <button onclick="agregarNombre()">➕ Agregar</button>
     </div>
 
-    <script src="/static/app.js"></script>
+    <h3>Nombres ingresados:</h3>
+    <ul id="lista"></ul>
+
+    <!-- BOTONES -->
+    <button id="generar-btn" onclick="generarParejas()">Generar Parejas 🔥</button>
+    <button onclick="resetApp()">Reset 🔄</button>
+
+    <h2>Resultado:</h2>
+    <div id="resultado"></div>
+
+    <!-- ===================== -->
+    <!-- BLOQUE DE PUNTAJES -->
+    <!-- ===================== -->
+
+    <h2>Puntajes</h2>
+    <div id="puntajes">
+        <p style="opacity:.6">Aún no hay parejas generadas</p>
+    </div>
+
+</div>
+
+<script src="/static/app.js"></script>
 </body>
 </html>
