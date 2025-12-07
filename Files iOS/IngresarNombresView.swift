@@ -1,37 +1,35 @@
 import SwiftUI
 
+// Formatea nombres: "  jUaN  " → "Juan"
 func normalizarNombre(_ texto: String) -> String {
     let trimmed = texto.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { return "" }
+
     let lower = trimmed.lowercased()
-    return lower.prefix(1).uppercased() + lower.dropFirst()
+    let first = lower.prefix(1).uppercased()
+    let rest = lower.dropFirst()
+    return first + rest
 }
 
 struct IngresarNombresView: View {
 
-    let maxJugadores: Int
-    @State private var nombres: [String]
-    @State private var goToScores = false
+    let teamCount: Int
+    var maxJugadores: Int { teamCount * 2 }
 
-    init(maxJugadores: Int) {
-        self.maxJugadores = maxJugadores
-        _nombres = State(initialValue: Array(repeating: "", count: maxJugadores))
+    @State private var nombres: [String]
+
+    // Creamos exactamente maxJugadores casillas vacías
+    init(teamCount: Int) {
+        self.teamCount = teamCount
+        let max = max(2, teamCount * 2)
+        _nombres = State(initialValue: Array(repeating: "", count: max))
     }
 
-    var equiposFinales: [Team] {
-        if maxJugadores == 6 {
-            return [
-                Team(name: "Equipo 1", players: Array(nombres[0...2]), points: 0),
-                Team(name: "Equipo 2", players: Array(nombres[3...5]), points: 0)
-            ]
-        } else {
-            var teams: [Team] = []
-            for i in stride(from: 0, to: maxJugadores, by: 2) {
-                let jugadores = [nombres[i], nombres[i+1]]
-                teams.append(Team(name: "Equipo \(teams.count + 1)", players: jugadores, points: 0))
-            }
-            return teams
-        }
+    // Solo nombres válidos, normalizados y no vacíos
+    var jugadoresValidos: [String] {
+        nombres
+            .map { normalizarNombre($0) }
+            .filter { !$0.isEmpty }
     }
 
     var body: some View {
@@ -41,26 +39,39 @@ struct IngresarNombresView: View {
                 .font(.title.bold())
 
             List {
-                ForEach(0..<maxJugadores, id: \.self) { i in
-                    TextField("Jugador \(i + 1)", text: $nombres[i])
-                        .textInputAutocapitalization(.never)
-                        .onChange(of: nombres[i]) {
-                            nombres[i] = normalizarNombre(nombres[i])
-                        }
+                ForEach(nombres.indices, id: \.self) { index in
+                    TextField(
+                        "Nombre \(index + 1)",
+                        text: Binding(
+                            get: { nombres[index] },
+                            set: { nuevoValor in
+                                nombres[index] = normalizarNombre(nuevoValor)
+                            }
+                        )
+                    )
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                 }
             }
 
-            NavigationLink(
-                destination: ScoresView(teams: equiposFinales),
-                isActive: $goToScores
-            ) {
-                EmptyView()
+            // Botón de prueba opcional (solo consola)
+            Button("Probar en consola") {
+                print("Nombres normalizados: \(jugadoresValidos)")
             }
+            .buttonStyle(.bordered)
 
-            Button("Iniciar Juego") {
-                goToScores = true
+            // Navegación hacia la Pantalla 2: Asignación
+            NavigationLink(
+                destination: AsignacionView(jugadores: jugadoresValidos)
+            ) {
+                Text("Iniciar juego")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
             }
+            // Solo permitimos continuar si se llenaron todos los nombres
             .buttonStyle(.borderedProminent)
+            .disabled(jugadoresValidos.count != maxJugadores)
 
             Spacer()
         }
