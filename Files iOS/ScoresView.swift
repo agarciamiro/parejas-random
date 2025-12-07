@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ScoresView: View {
 
-    // Los equipos llegan desde PartidaView
     @State var teams: [Team]
 
     var body: some View {
@@ -12,30 +11,31 @@ struct ScoresView: View {
                 .font(.largeTitle.bold())
 
             ForEach($teams) { $team in
-                HStack {
-                    // Nombre del equipo
+                VStack(alignment: .leading) {
+
                     Text(team.name)
-                        .frame(width: 120, alignment: .leading)
+                        .font(.headline)
 
-                    Spacer()
+                    Text(team.players.joined(separator: " & "))
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
 
-                    // Restar (sin bajar de 0)
-                    Button("−") {
-                        if team.points > 0 {
-                            team.points -= 1
+                    HStack {
+                        Button("−") {
+                            if team.points > 0 {
+                                team.points -= 1
+                            }
+                        }
+
+                        Text("\(team.points)")
+                            .frame(width: 40)
+
+                        Button("+") {
+                            team.points += 1
                         }
                     }
-
-                    // Puntaje
-                    Text("\(team.points)")
-                        .frame(width: 40)
-
-                    // Sumar
-                    Button("+") {
-                        team.points += 1
-                    }
                 }
-                .font(.title2)
+                .padding(.bottom, 8)
             }
 
             Spacer()
